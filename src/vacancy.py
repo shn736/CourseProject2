@@ -1,6 +1,3 @@
-from src.api import hh_vacancies
-
-
 class Vacancy:
     def __init__(self, title, url, salary, description):
         self.title = title
@@ -10,7 +7,7 @@ class Vacancy:
 
     def validate_salary(self, salary):
         if not salary:
-            return "Зарплата не указана"
+            return 0
         return salary
 
     def __lt__(self, other):
@@ -26,10 +23,7 @@ class Vacancy:
             vacancies.append(cls(
                 item['name'],
                 item['alternate_url'],
-                item['salary']  or "Зарплата не указана",
+                item['salary'] or 0,
                 item['snippet']['requirement']
             ))
         return vacancies
-
-vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
-print(vacancies_list)

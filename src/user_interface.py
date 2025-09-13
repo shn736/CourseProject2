@@ -1,35 +1,31 @@
-
-from src.api import hh_vacancies
+from src.api import HeadHunterAPI
+from src.json_saver import JSONSaver, filter_vacancies, get_vacancies_by_salary, sort_vacancies, get_top_vacancies, \
+    print_vacancies
 from src.vacancy import Vacancy
 
 
-def filter_vacancies(vacancies, keywords):
-    return [vacancy for vacancy in vacancies if any(keyword in vacancy.description for keyword in keywords)]
+# Функция для взаимодействия с пользователем
+def user_interaction():
+    hh_api = HeadHunterAPI()
+    json_saver = JSONSaver()
 
-vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
-print(filter_vacancies(vacancies_list, 'Москва'))
+    search_query = input("Введите поисковый запрос: ")
+    top_n = int(input("Введите количество вакансий для вывода в топ N: "))
+    filter_words = input("Введите ключевые слова для фильтрации вакансий: ").split()
+    salary_range = input("Введите диапазон зарплат: ")  # Пример: 100000 - 150000
 
-def get_vacancies_by_salary(vacancies, salary_range):
-    for v in vacancies:
+    # Получение и преобразование вакансий
+    hh_vacancies = hh_api.get_vacancies(search_query)
+    vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
 
-            print(v.salary['to'])
-
-
-    # min_salary, max_salary = map(int, salary_range.split(' - '))
-    # return [vacancy for vacancy in vacancies if
-    #         isinstance(vacancy.salary, int) and min_salary <= vacancy.salary <= max_salary]
-
-print(get_vacancies_by_salary(vacancies_list,  10000))
-
-def sort_vacancies(vacancies):
-    return sorted(vacancies)
-
-
-def get_top_vacancies(vacancies, n):
-    return vacancies[:n]
+    # Фильтрация и сортировка вакансий
+    filtered_vacancies = filter_vacancies(vacancies_list, filter_words)
+    ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
+    sorted_vacancies = sort_vacancies(ranged_vacancies)
+    top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
 
 
-def print_vacancies(vacancies):
-    for vacancy in vacancies:
-        print(vacancy)
-
+    # Печать вакансий и сохранение
+    print_vacancies(top_vacancies)
+    for vacancy in top_vacancies:
+        json_saver.add_vacancy(vacancy)
