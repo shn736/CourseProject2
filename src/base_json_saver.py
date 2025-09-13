@@ -1,15 +1,13 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
-# Абстрактный класс для работы с файлами
-class AbstractFileSaver(ABC):
+
+class AbstractSaver(ABC):
+    """Абстрактный класс для сохранения вакансий"""
     @abstractmethod
-    def add_vacancy(self, vacancy):
+    def add_vacancy(self, vacancy: list) -> Any:
         pass
 
     @abstractmethod
-    def delete_vacancy(self, vacancy):
-        pass
-
-    @abstractmethod
-    def get_vacancies(self):
+    def delete_vacancy(self, vacancy: list) -> Any:
         pass

@@ -1,35 +1,32 @@
-from src.api import hh_vacancies
+from typing import Any
 
 
 class Vacancy:
-    def __init__(self, title, url, salary, description):
+    def __init__(self, title: Any, url: Any, salary: Any, description: Any) -> None:
         self.title = title
         self.url = url
         self.salary = self.validate_salary(salary)
         self.description = description
 
-    def validate_salary(self, salary):
+    def validate_salary(self, salary: Any) -> Any:
         if not salary:
-            return "Зарплата не указана"
+            return 0
         return salary
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> Any:
         return self.salary < other.salary
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Vacancy({self.title}, {self.url}, {self.salary}, {self.description})"
 
     @classmethod
-    def cast_to_object_list(cls, data):
+    def cast_to_object_list(cls, data: Any) -> Any:
         vacancies = []
         for item in data['items']:
             vacancies.append(cls(
                 item['name'],
                 item['alternate_url'],
-                item['salary']  or "Зарплата не указана",
+                item['salary'] or 0,
                 item['snippet']['requirement']
             ))
         return vacancies
-
-vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
-print(vacancies_list)

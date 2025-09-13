@@ -1,20 +1,14 @@
+from typing import Any
+
 import requests
-from src.base_api import JobAPI
-from src.vacancy import Vacancy
+
+from src.base_api import AbstractAPI
 
 
-class HeadHunterAPI(JobAPI):
-    BASE_URL = "https://api.hh.ru/vacancies"
+class HeadHunterAPI(AbstractAPI):
+    """Класс для работы с API hh.ru"""
+    base_url = 'https://api.hh.ru/vacancies'
 
-    def get_vacancies(self, query, count=20):
-        params = {'text': query, 'per_page': count}
-        response = requests.get(self.BASE_URL, params=params)
-        response.raise_for_status()  # Проверка на ошибки
-        return response.json()
-
-
-
-hh_api = HeadHunterAPI()
-search_query = input("Введите поисковый запрос: ")
-hh_vacancies = hh_api.get_vacancies(search_query)
-print(hh_vacancies)
+    def get_vacancies(self, query: str) -> Any:
+        response = requests.get(self.base_url, params={'text': query})
+        return response.json() if response.status_code == 200 else {}
