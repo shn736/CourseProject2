@@ -1,23 +1,26 @@
+from typing import Any
+
+
 class Vacancy:
-    def __init__(self, title, url, salary, description):
+    def __init__(self, title: Any, url: Any, salary: Any, description: Any) -> None:
         self.title = title
         self.url = url
         self.salary = self.validate_salary(salary)
         self.description = description
 
-    def validate_salary(self, salary):
+    def validate_salary(self, salary: Any) -> Any:
         if not salary:
             return 0
         return salary
 
-    def __lt__(self, other):
+    def __lt__(self, other: Any) -> Any:
         return self.salary < other.salary
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Vacancy({self.title}, {self.url}, {self.salary}, {self.description})"
 
     @classmethod
-    def cast_to_object_list(cls, data):
+    def cast_to_object_list(cls, data: Any) -> Any:
         vacancies = []
         for item in data['items']:
             vacancies.append(cls(

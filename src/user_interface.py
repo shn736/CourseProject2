@@ -1,11 +1,11 @@
 from src.api import HeadHunterAPI
-from src.json_saver import JSONSaver, filter_vacancies, get_vacancies_by_salary, sort_vacancies, get_top_vacancies, \
-    print_vacancies
+from src.json_saver import (JSONSaver, filter_vacancies, get_top_vacancies, get_vacancies_by_salary, print_vacancies,
+                            sort_vacancies)
 from src.vacancy import Vacancy
 
 
-# Функция для взаимодействия с пользователем
-def user_interaction():
+def user_interaction() -> None:
+    """Функция для взаимодействия с пользователем"""
     hh_api = HeadHunterAPI()
     json_saver = JSONSaver()
 
@@ -23,7 +23,6 @@ def user_interaction():
     ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
     sorted_vacancies = sort_vacancies(ranged_vacancies)
     top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
-
 
     # Печать вакансий и сохранение
     print_vacancies(top_vacancies)
